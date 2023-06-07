@@ -1,11 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateAlertDto } from './create-alert.dto';
+import { IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
-import { IsNotEmpty, IsString, MaxLength, IsEmail, IsBoolean } from 'class-validator';
-
-export class UpdateAlertDto extends PartialType(CreateAlertDto) {
-  id: string;
-
+export class UpdateAlertDto {
   @IsNotEmpty({ message: 'Insira um status' })
   @IsString({ message: 'Insira um status válido' })
   status: string;

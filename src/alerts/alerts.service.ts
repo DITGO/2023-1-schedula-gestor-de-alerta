@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Alert } from './entities/alert.entity';
@@ -7,7 +11,6 @@ import { UpdateAlertDto } from './dto/update-alert.dto';
 
 @Injectable()
 export class AlertsService {
-
   constructor(
     @InjectRepository(Alert)
     private alertRepo: Repository<Alert>,
@@ -39,10 +42,7 @@ export class AlertsService {
     return alert;
   }
 
-  async updateAlert(
-    idAlert: string,
-    dto: UpdateAlertDto,
-  ): Promise<Alert> {
+  async updateAlert(idAlert: string, dto: UpdateAlertDto): Promise<Alert> {
     const { status, pendency, read } = dto;
     const alert = await this.alertRepo.findOneBy({ id: idAlert });
 

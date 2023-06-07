@@ -2,103 +2,114 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AlertsController } from './alerts.controller';
 import { AlertsService } from './alerts.service';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CreateAlertDto } from './dto/create-alert.dto';
+import { UpdateAlertDto } from './dto/update-alert.dto';
 import { CacheModule } from '@nestjs/common';
 
-describe('CategoriesController', () => {
-  let categoriesController: CategoriesController;
+describe('AlertsController', () => {
+  let alertsController: AlertsController;
 
   const mockUuid = uuidv4();
 
-  const mockCreateCategoryDto: CreateCategoryDto = {
-    name: 'mock_category',
+  const mockCreateAlertDto: CreateAlertDto = {
+    sourceName: 'mock_name',
+    sourceEmail: 'mock_email',
+    targetName: 'mock_target_name',
+    targetEmail: 'mock_target_email',
+    message: 'mock_message',
+    status: 'mock_status',
+    pendency: '',
+    read: false,
+    createdAt: new Date('2023-06-06'),
   };
 
-  const mockUpdteCategoryDto: UpdateCategoryDto = {
-    name: 'new_mock_category',
+  const mockUpdteAlertDto: UpdateAlertDto = {
+    status: 'mock_status_pendent',
+    read: true,
+    pendency: 'mock_pendency',
   };
 
-  const mockCategoriesService = {
-    createCategory: jest.fn((dto) => {
+  const mockAlertsService = {
+    createAlert: jest.fn((dto) => {
       return {
         ...dto,
       };
     }),
-    findCategoryById: jest.fn((id) => {
+    findAlertById: jest.fn((id) => {
       return {
-        ...mockCreateCategoryDto,
+        ...mockCreateAlertDto,
         id,
       };
     }),
-    updateCategory: jest.fn((dto, id) => {
+    updateAlert: jest.fn((id, dto) => {
       return {
-        ...mockCreateCategoryDto,
+        ...mockCreateAlertDto,
         ...dto,
         id,
       };
     }),
-    deleteCategory: jest.fn((id) => {
-      return;
+    deleteAlert: jest.fn((id) => {
+      return id;
     }),
-    findCategories: jest.fn(() => {
-      return [{ ...mockCreateCategoryDto }];
+    findAlerts: jest.fn(() => {
+      return [{ ...mockCreateAlertDto }];
     }),
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CategoriesController],
-      providers: [CategoriesService],
+      controllers: [AlertsController],
+      providers: [AlertsService],
       imports: [CacheModule.register()],
     })
-      .overrideProvider(CategoriesService)
-      .useValue(mockCategoriesService)
+      .overrideProvider(AlertsService)
+      .useValue(mockAlertsService)
       .compile();
 
-    categoriesController =
-      module.get<CategoriesController>(CategoriesController);
+    alertsController = module.get<AlertsController>(AlertsController);
   });
 
   it('should be defined', () => {
-    expect(categoriesController).toBeDefined();
+    expect(alertsController).toBeDefined();
   });
 
-  it('should create a new category with success', async () => {
-    const dto = mockCreateCategoryDto;
-    const response = await categoriesController.createCategory(dto);
+  it('should create a new alert with success', async () => {
+    const dto = mockCreateAlertDto;
+    const response = await alertsController.create(dto);
 
     expect(response).toMatchObject({ ...dto });
   });
 
-  it('should return an category with success', async () => {
-    const categoryId = mockUuid;
-    const response = await categoriesController.findCategoryById(categoryId);
+  it('should return an alert with success', async () => {
+    const alertId = mockUuid;
+    const response = await alertsController.findOne(alertId);
 
-    expect(response).toMatchObject({ id: categoryId });
+    expect(response).toMatchObject({ id: alertId });
   });
 
-  it('should return all categories with success', async () => {
-    const response = await categoriesController.findCategories();
+  it('should return all alerts with success', async () => {
+    const response = await alertsController.findAll();
 
     expect(response.length).toBeGreaterThan(0);
-    expect(response).toEqual([{ ...mockCreateCategoryDto }]);
+    expect(response).toEqual([{ ...mockCreateAlertDto }]);
   });
 
-  it('should update an category with success', async () => {
-    const categoryId = mockUuid;
-    const dto = mockUpdteCategoryDto;
-    const response = await categoriesController.updateCategory(dto, categoryId);
-
-    expect(response).toMatchObject({ ...dto, id: categoryId });
+  it('should update an alert with success', async () => {
+    const alertId = mockUuid;
+    const dto = mockUpdteAlertDto;
+    const response = await alertsController.update(alertId, dto);
+    expect(response).toMatchObject({
+      ...mockCreateAlertDto,
+      ...dto,
+      id: alertId,
+    });
   });
 
-  it('should delete an category with success', async () => {
-    const categoryId = mockUuid;
-    const successMessage = 'Categoria removida com sucesso';
-    const response = await categoriesController.deleteCategory(categoryId);
+  it('should delete an alert with success', async () => {
+    const alertId = mockUuid;
+    const successMessage = 'Alerta removido com sucesso';
+    const response = await alertsController.remove(alertId);
 
-    expect(response).toBe(successMessage);
+    expect(response).toMatchObject({ message: successMessage });
   });
-
 });

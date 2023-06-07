@@ -1,42 +1,34 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Alert extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    sourceName: string;
+  @Column()
+  sourceName: string;
 
-    @Column()
-    sourceEmail: string;
+  @Column()
+  sourceEmail: string;
 
-    @Column()
-    targetName: string;
+  @Column()
+  targetName: string;
 
-    @Column()
-    targetEmail: string;
+  @Column()
+  targetEmail: string;
 
-    @Column()
-    message: string;
+  @Column()
+  message: string;
 
-    @Column()
-    status: string;
+  @Column()
+  status: string;
 
-    @Column()
-    pendency: string;
-    
-    @Column()
-    read: boolean;
-    
-    @Column()
-    createdAt: Date;
+  @Column()
+  pendency: string;
 
-    @Column()
-    updatedAt: Date;
+  @Column()
+  read: boolean;
+
+  @Column()
+  createdAt: Date;
 }
