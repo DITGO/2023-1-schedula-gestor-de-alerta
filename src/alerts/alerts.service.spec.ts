@@ -49,7 +49,7 @@ describe('AlertsService', () => {
   const mockAlertEntityList = [{ ...mockCreateAlertEntity }];
 
   beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       providers: [
         AlertsService,
         {
@@ -66,8 +66,8 @@ describe('AlertsService', () => {
       ],
     }).compile();
   
-    service = moduleRef.get<AlertsService>(AlertsService);
-    alertRepo = moduleRef.get<Repository<Alert>>(getRepositoryToken(Alert));
+    service = module.get<AlertsService>(AlertsService);
+    alertRepo = module.get<Repository<Alert>>(getRepositoryToken(Alert));
   });
 
   it('should be defined', () => {
