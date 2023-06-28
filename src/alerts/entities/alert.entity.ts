@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity("notifications")
 export class Alert extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
