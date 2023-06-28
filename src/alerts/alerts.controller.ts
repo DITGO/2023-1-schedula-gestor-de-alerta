@@ -11,7 +11,7 @@ import { AlertsService } from './alerts.service';
 import { CreateAlertDto } from './dto/create-alert.dto';
 import { UpdateAlertDto } from './dto/update-alert.dto';
 
-@Controller('alerts')
+@Controller('notifications')
 export class AlertsController {
   constructor(private readonly alertsService: AlertsService) {}
 
